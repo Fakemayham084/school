@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Website in New Tab</title>
+    <script>
+        function openWebsiteInNewTab() {
+            var url = document.getElementById("urlInput").value;
+            var newTab = window.open('about:blank', '_blank');
+            newTab.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <h1>Open Website in New Tab</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL" style="width: 300px;">
+    <button onclick="openWebsiteInNewTab()">Open Website</button>
+</body>
+</html>
